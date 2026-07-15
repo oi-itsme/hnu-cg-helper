@@ -45,10 +45,10 @@ pub async fn get_courses(
 /// GET /api/courses/:course_id/assignments
 pub async fn get_assignments(
     headers: HeaderMap,
-    Path(_course_id): Path<u32>,
+    Path(course_id): Path<u32>,
 ) -> Result<Json<Vec<CgAssignment>>, (StatusCode, Json<hnu_cg_helper_core::error::ErrorResponse>)> {
     let token = token_from_headers(&headers)?;
-    let assignments = core_get_assignments(&token).await.map_err(|e| {
+    let assignments = core_get_assignments(&token, course_id).await.map_err(|e| {
         tracing::error!(error = %e, "获取作业列表失败");
         (StatusCode::INTERNAL_SERVER_ERROR, Json((&e).into()))
     })?;

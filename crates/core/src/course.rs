@@ -10,8 +10,11 @@ pub async fn get_course_list(token: &CgToken) -> Result<Vec<CgCourse>, CoreError
 }
 
 /// 获取指定课程的作业列表
-pub async fn get_assignment_list(token: &CgToken) -> Result<Vec<CgAssignment>, CoreError> {
-    let assignments = hnu_query::cg::get_assignment_list(token).await?;
+pub async fn get_assignment_list(
+    token: &CgToken,
+    course_id: u32,
+) -> Result<Vec<CgAssignment>, CoreError> {
+    let assignments = hnu_query::cg::get_assignment_list(token, course_id).await?;
     Ok(assignments)
 }
 
