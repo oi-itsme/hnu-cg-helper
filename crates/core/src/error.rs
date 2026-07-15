@@ -1,5 +1,6 @@
 use hnu_query::Error as HnuError;
-use hnu_query::cg::error::{CgError, LoginError};
+use hnu_query::cg::error::CgError;
+use hnu_query::cg::login::LoginError;
 use serde::Serialize;
 
 /// Core crate 统一错误类型

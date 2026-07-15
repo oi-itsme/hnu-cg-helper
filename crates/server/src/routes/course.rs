@@ -44,10 +44,10 @@ pub async fn get_courses(
 /// GET /api/courses/:course_id/assignments
 pub async fn get_assignments(
     headers: HeaderMap,
-    Path(course_id): Path<u32>,
+    Path(_course_id): Path<u32>,
 ) -> Result<Json<Vec<CgAssignment>>, (StatusCode, Json<hnu_cg_helper_core::error::ErrorResponse>)> {
     let token = token_from_headers(&headers)?;
-    let assignments = core_get_assignments(&token, course_id)
+    let assignments = core_get_assignments(&token)
         .await
         .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, Json((&e).into())))?;
     Ok(Json(assignments))
@@ -56,10 +56,10 @@ pub async fn get_assignments(
 /// GET /api/courses/:course_id/assignments/:assign_id/problems
 pub async fn get_problems(
     headers: HeaderMap,
-    Path((course_id, assign_id)): Path<(u32, u32)>,
+    Path((_course_id, assign_id)): Path<(u32, u32)>,
 ) -> Result<Json<Vec<CgProblem>>, (StatusCode, Json<hnu_cg_helper_core::error::ErrorResponse>)> {
     let token = token_from_headers(&headers)?;
-    let problems = core_get_problems(&token, course_id, assign_id)
+    let problems = core_get_problems(&token, assign_id)
         .await
         .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, Json((&e).into())))?;
     Ok(Json(problems))
@@ -73,11 +73,11 @@ pub(crate) struct ProblemPageResponse {
 /// GET /api/courses/:course_id/assignments/:assign_id/problems/:pro_num
 pub async fn get_problem_page(
     headers: HeaderMap,
-    Path((course_id, assign_id, pro_num)): Path<(u32, u32, u32)>,
+    Path((_course_id, assign_id, pro_num)): Path<(u32, u32, u32)>,
 ) -> Result<Json<ProblemPageResponse>, (StatusCode, Json<hnu_cg_helper_core::error::ErrorResponse>)>
 {
     let token = token_from_headers(&headers)?;
-    let html = core_get_page(&token, course_id, assign_id, pro_num)
+    let html = core_get_page(&token, assign_id, pro_num)
         .await
         .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, Json((&e).into())))?;
     Ok(Json(ProblemPageResponse { html }))
