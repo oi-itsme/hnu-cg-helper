@@ -1,0 +1,74 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+env:
+  CARGO_TERM_COLOR: always
+  BIN: hnu-cg-helper-webui
+  PKG: hnu-cg-helper-server
+
+jobs:
+  build:
+    name: Build (${{ matrix.suffix }})
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            suffix: linux-x86_64
+            bin_ext: ""
+            archive_ext: "tar.gz"
+          - os: windows-latest
+            suffix: windows-x86_64
+            bin_ext: ".exe"
+            archive_ext: "zip"
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Extract version
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> $GITHUB_ENV
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/*"
+
+      - uses: pnpm/action-setup@v4
+
+      - name: Install frontend dependencies
+        run: cd frontend && pnpm install --frozen-lockfile
+
+      - name: Build frontend
+        run: cd frontend && pnpm build
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: ${{ matrix.suffix }}
+
+      - name: Build Rust binary
+        run: cargo build -p ${{ env.PKG }} --release --features embed-frontend
+
+      - name: Package
+        shell: bash
+        run: |
+          bin=hnu-cg-helper-v${{ env.VERSION }}-webui${{ matrix.bin_ext }}
+          archive=hnu-cg-helper-v${{ env.VERSION }}-webui-${{ matrix.suffix }}.${{ matrix.archive_ext }}
+
+          mv target/release/${{ env.BIN }}${{ matrix.bin_ext }} "$bin"
+          tar -caf "$archive" "$bin"
+          echo "ARTIFACT=$archive" >> $GITHUB_ENV
+
+      - name: Upload to release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: ${{ env.ARTIFACT }}
+          prerelease: ${{ contains(github.ref_name, 'alpha') || contains(github.ref_name, 'beta') || contains(github.ref_name, 'rc') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
