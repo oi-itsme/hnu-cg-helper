@@ -35,9 +35,10 @@ pub async fn get_courses(
     headers: HeaderMap,
 ) -> Result<Json<Vec<CgCourse>>, (StatusCode, Json<hnu_cg_helper_core::error::ErrorResponse>)> {
     let token = token_from_headers(&headers)?;
-    let courses = core_get_courses(&token)
-        .await
-        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, Json((&e).into())))?;
+    let courses = core_get_courses(&token).await.map_err(|e| {
+        tracing::error!(error = %e, "获取课程列表失败");
+        (StatusCode::INTERNAL_SERVER_ERROR, Json((&e).into()))
+    })?;
     Ok(Json(courses))
 }
 
@@ -47,9 +48,10 @@ pub async fn get_assignments(
     Path(_course_id): Path<u32>,
 ) -> Result<Json<Vec<CgAssignment>>, (StatusCode, Json<hnu_cg_helper_core::error::ErrorResponse>)> {
     let token = token_from_headers(&headers)?;
-    let assignments = core_get_assignments(&token)
-        .await
-        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, Json((&e).into())))?;
+    let assignments = core_get_assignments(&token).await.map_err(|e| {
+        tracing::error!(error = %e, "获取作业列表失败");
+        (StatusCode::INTERNAL_SERVER_ERROR, Json((&e).into()))
+    })?;
     Ok(Json(assignments))
 }
 
@@ -59,9 +61,10 @@ pub async fn get_problems(
     Path((_course_id, assign_id)): Path<(u32, u32)>,
 ) -> Result<Json<Vec<CgProblem>>, (StatusCode, Json<hnu_cg_helper_core::error::ErrorResponse>)> {
     let token = token_from_headers(&headers)?;
-    let problems = core_get_problems(&token, assign_id)
-        .await
-        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, Json((&e).into())))?;
+    let problems = core_get_problems(&token, assign_id).await.map_err(|e| {
+        tracing::error!(error = %e, "获取题目列表失败");
+        (StatusCode::INTERNAL_SERVER_ERROR, Json((&e).into()))
+    })?;
     Ok(Json(problems))
 }
 
@@ -79,6 +82,9 @@ pub async fn get_problem_page(
     let token = token_from_headers(&headers)?;
     let html = core_get_page(&token, assign_id, pro_num)
         .await
-        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, Json((&e).into())))?;
+        .map_err(|e| {
+            tracing::error!(error = %e, "获取题目详情失败");
+            (StatusCode::INTERNAL_SERVER_ERROR, Json((&e).into()))
+        })?;
     Ok(Json(ProblemPageResponse { html }))
 }

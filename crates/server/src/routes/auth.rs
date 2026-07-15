@@ -36,9 +36,10 @@ pub(crate) struct CaptchaResponse {
 pub async fn get_captcha(
     State(state): State<AppState>,
 ) -> Result<Json<CaptchaResponse>, (StatusCode, Json<hnu_cg_helper_core::error::ErrorResponse>)> {
-    let (session, captcha_bytes) = core_auth::create_session()
-        .await
-        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, Json((&e).into())))?;
+    let (session, captcha_bytes) = core_auth::create_session().await.map_err(|e| {
+        tracing::error!(error = %e, "获取验证码失败");
+        (StatusCode::INTERNAL_SERVER_ERROR, Json((&e).into()))
+    })?;
 
     let session_id = state.store_session(session).await;
 
@@ -79,7 +80,10 @@ pub async fn do_login(
 
     let token = core_auth::login(session, &req.stu_id, &req.password, &req.captcha_code)
         .await
-        .map_err(|e| (StatusCode::UNAUTHORIZED, Json((&e).into())))?;
+        .map_err(|e| {
+            tracing::error!(error = %e, "登录失败");
+            (StatusCode::UNAUTHORIZED, Json((&e).into()))
+        })?;
 
     let token_json = core_auth::serialize_token(&token)
         .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, Json((&e).into())))?;
