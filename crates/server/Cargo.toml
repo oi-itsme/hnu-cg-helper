@@ -1,0 +1,27 @@
+[package]
+name = "hnu-cg-helper-server"
+version = "0.1.0"
+edition = "2024"
+
+[features]
+default = ["embed-frontend"]
+embed-frontend = []
+
+[dependencies]
+hnu-cg-helper-core = { path = "../core" }
+axum = { version = "0.8", features = ["macros"] }
+tokio = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tower-http = { version = "0.6", features = ["cors"] }
+tracing = { workspace = true }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tokio-stream = "0.1"
+futures-core = "0.3"
+uuid = { version = "1", features = ["v4"] }
+base64 = "0.22"
+dirs = "6"
+memory-serve = "2"
+
+[build-dependencies]
+memory-serve = "2"

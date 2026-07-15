@@ -1,0 +1,20 @@
+[package]
+name = "hnu-cg-helper-core"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+hnu_query = { path = "../../../hnu_query" }
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+reqwest = { workspace = true }
+tracing = { workspace = true }
+futures = { workspace = true }
+base64 = "0.22"
+aes-gcm = "0.10"
+rand = "0.8"
+keyring = "3"
+toml = "0.8"
+dirs = "6"
