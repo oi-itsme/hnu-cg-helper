@@ -15,29 +15,8 @@ class ApiError extends Error {
   }
 }
 
-function getToken(): string | null {
-  return localStorage.getItem('cg_token')
-}
-
-export function setToken(token: string) {
-  localStorage.setItem('cg_token', token)
-}
-
-export function clearToken() {
-  localStorage.removeItem('cg_token')
-}
-
-export function hasToken(): boolean {
-  return getToken() !== null
-}
-
 async function request<T>(path: string, opts: RequestOptions = {}): Promise<T> {
   const { method = 'GET', body, headers = {} } = opts
-
-  const token = getToken()
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`
-  }
 
   const init: RequestInit = {
     method,
@@ -67,19 +46,27 @@ export interface CaptchaResponse {
   captcha_image: string
 }
 
-export interface LoginResponse {
-  token: string
-}
-
 export function getCaptcha(): Promise<CaptchaResponse> {
   return request('/auth/captcha', { method: 'POST' })
 }
 
-export function login(stu_id: string, password: string, captcha_code: string, session_id: string): Promise<LoginResponse> {
+export function login(stu_id: string, password: string, captcha_code: string, session_id: string): Promise<void> {
   return request('/auth/login', {
     method: 'POST',
     body: { session_id, stu_id, password, captcha_code },
   })
+}
+
+export function logout(): Promise<void> {
+  return request('/auth/logout', { method: 'POST' })
+}
+
+export interface AuthStatus {
+  authenticated: boolean
+}
+
+export function getAuthStatus(): Promise<AuthStatus> {
+  return request('/auth/status')
 }
 
 // Courses

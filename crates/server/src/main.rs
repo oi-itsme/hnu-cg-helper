@@ -71,6 +71,8 @@ async fn main() {
         // Auth
         .route("/api/auth/captcha", post(routes::auth::get_captcha))
         .route("/api/auth/login", post(routes::auth::do_login))
+        .route("/api/auth/logout", post(routes::auth::logout))
+        .route("/api/auth/status", get(routes::auth::auth_status))
         // Courses
         .route("/api/courses", get(routes::course::get_courses))
         .route(

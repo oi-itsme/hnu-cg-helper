@@ -1,27 +1,26 @@
 use axum::{Json, extract::State, http::StatusCode};
 use base64::Engine;
 use base64::engine::general_purpose::STANDARD as BASE64;
-use hnu_cg_helper_core::CgToken;
 use hnu_cg_helper_core::auth as core_auth;
-use hnu_cg_helper_core::error::CoreError;
 use serde::{Deserialize, Serialize};
 
 use crate::state::AppState;
 
-/// 从 Authorization header 提取并还原 CgToken
-pub fn extract_token(auth_header: &str) -> Result<CgToken, CoreError> {
-    let token_str = auth_header
-        .strip_prefix("Bearer ")
-        .ok_or_else(|| CoreError::Token("Missing Bearer prefix".into()))?;
+#[derive(Serialize)]
+pub(crate) struct AuthStatusResponse {
+    pub authenticated: bool,
+}
 
-    let decoded = BASE64
-        .decode(token_str)
-        .map_err(|e| CoreError::Token(format!("Base64 decode failed: {e}")))?;
-
-    let json: serde_json::Value = serde_json::from_slice(&decoded)
-        .map_err(|e| CoreError::Token(format!("JSON parse failed: {e}")))?;
-
-    core_auth::deserialize_token(&json)
+/// GET /api/auth/status
+///
+/// 检查是否已登录（token 存在且有效）。
+pub async fn auth_status(
+    State(state): State<AppState>,
+) -> Json<AuthStatusResponse> {
+    let token = state.current_token.read().await;
+    Json(AuthStatusResponse {
+        authenticated: token.is_some(),
+    })
 }
 
 #[derive(Serialize)]
@@ -59,12 +58,12 @@ pub(crate) struct LoginRequest {
 
 #[derive(Serialize)]
 pub(crate) struct LoginResponse {
-    pub token: String, // base64-encoded token JSON
+    pub success: bool,
 }
 
 /// POST /api/auth/login
 ///
-/// 使用验证码完成登录，返回可缓存的 token。
+/// 使用验证码完成登录，token 保存在服务器内存中。
 pub async fn do_login(
     State(state): State<AppState>,
     Json(req): Json<LoginRequest>,
@@ -85,10 +84,18 @@ pub async fn do_login(
             (StatusCode::UNAUTHORIZED, Json((&e).into()))
         })?;
 
-    let token_json = core_auth::serialize_token(&token)
-        .map_err(|e| (StatusCode::INTERNAL_SERVER_ERROR, Json((&e).into())))?;
+    // 保存到服务器内存
+    *state.current_token.write().await = Some(token);
 
-    let encoded = BASE64.encode(serde_json::to_string(&token_json).unwrap());
+    Ok(Json(LoginResponse { success: true }))
+}
 
-    Ok(Json(LoginResponse { token: encoded }))
+/// POST /api/auth/logout
+///
+/// 清除当前登录状态。
+pub async fn logout(
+    State(state): State<AppState>,
+) -> Json<LoginResponse> {
+    *state.current_token.write().await = None;
+    Json(LoginResponse { success: true })
 }

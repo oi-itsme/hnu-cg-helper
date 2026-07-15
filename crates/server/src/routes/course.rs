@@ -1,4 +1,4 @@
-use axum::{Json, extract::Path, http::StatusCode};
+use axum::{Json, extract::Path, extract::State, http::StatusCode};
 use hnu_cg_helper_core::{
     CgAssignment, CgCourse, CgProblem, CgToken,
     course::{
@@ -7,34 +7,32 @@ use hnu_cg_helper_core::{
     },
 };
 
-use crate::routes::auth::extract_token;
+use crate::state::AppState;
 
-use axum::http::HeaderMap;
-
-/// 从请求 headers 中提取 CgToken
-fn token_from_headers(
-    headers: &HeaderMap,
+/// 从 state 中提取 CgToken
+async fn token_from_state(
+    state: &AppState,
 ) -> Result<CgToken, (StatusCode, Json<hnu_cg_helper_core::error::ErrorResponse>)> {
-    let auth = headers
-        .get("Authorization")
-        .and_then(|v| v.to_str().ok())
+    state
+        .current_token
+        .read()
+        .await
+        .clone()
         .ok_or_else(|| {
             (
                 StatusCode::UNAUTHORIZED,
                 Json(hnu_cg_helper_core::error::ErrorResponse {
-                    error: "Missing Authorization header".into(),
+                    error: "Not authenticated".into(),
                 }),
             )
-        })?;
-
-    extract_token(auth).map_err(|e| (StatusCode::UNAUTHORIZED, Json((&e).into())))
+        })
 }
 
 /// GET /api/courses
 pub async fn get_courses(
-    headers: HeaderMap,
+    State(state): State<AppState>,
 ) -> Result<Json<Vec<CgCourse>>, (StatusCode, Json<hnu_cg_helper_core::error::ErrorResponse>)> {
-    let token = token_from_headers(&headers)?;
+    let token = token_from_state(&state).await?;
     let courses = core_get_courses(&token).await.map_err(|e| {
         tracing::error!(error = %e, "获取课程列表失败");
         (StatusCode::INTERNAL_SERVER_ERROR, Json((&e).into()))
@@ -44,10 +42,10 @@ pub async fn get_courses(
 
 /// GET /api/courses/:course_id/assignments
 pub async fn get_assignments(
-    headers: HeaderMap,
+    State(state): State<AppState>,
     Path(course_id): Path<u32>,
 ) -> Result<Json<Vec<CgAssignment>>, (StatusCode, Json<hnu_cg_helper_core::error::ErrorResponse>)> {
-    let token = token_from_headers(&headers)?;
+    let token = token_from_state(&state).await?;
     let assignments = core_get_assignments(&token, course_id).await.map_err(|e| {
         tracing::error!(error = %e, "获取作业列表失败");
         (StatusCode::INTERNAL_SERVER_ERROR, Json((&e).into()))
@@ -57,10 +55,10 @@ pub async fn get_assignments(
 
 /// GET /api/courses/:course_id/assignments/:assign_id/problems
 pub async fn get_problems(
-    headers: HeaderMap,
+    State(state): State<AppState>,
     Path((_course_id, assign_id)): Path<(u32, u32)>,
 ) -> Result<Json<Vec<CgProblem>>, (StatusCode, Json<hnu_cg_helper_core::error::ErrorResponse>)> {
-    let token = token_from_headers(&headers)?;
+    let token = token_from_state(&state).await?;
     let problems = core_get_problems(&token, assign_id).await.map_err(|e| {
         tracing::error!(error = %e, "获取题目列表失败");
         (StatusCode::INTERNAL_SERVER_ERROR, Json((&e).into()))
@@ -75,11 +73,11 @@ pub(crate) struct ProblemPageResponse {
 
 /// GET /api/courses/:course_id/assignments/:assign_id/problems/:pro_num
 pub async fn get_problem_page(
-    headers: HeaderMap,
+    State(state): State<AppState>,
     Path((_course_id, assign_id, pro_num)): Path<(u32, u32, u32)>,
 ) -> Result<Json<ProblemPageResponse>, (StatusCode, Json<hnu_cg_helper_core::error::ErrorResponse>)>
 {
-    let token = token_from_headers(&headers)?;
+    let token = token_from_state(&state).await?;
     let html = core_get_page(&token, assign_id, pro_num)
         .await
         .map_err(|e| {

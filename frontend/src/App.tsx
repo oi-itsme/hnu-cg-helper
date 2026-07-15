@@ -9,8 +9,17 @@ import ProblemPage from '@/pages/problem'
 import { AIPanel } from '@/components/ai-panel'
 import { Sidebar } from '@/components/sidebar'
 
+function LoadingScreen() {
+  return (
+    <div className="flex min-h-screen items-center justify-center">
+      <p className="text-muted-foreground">正在检查登录状态...</p>
+    </div>
+  )
+}
+
 function ProtectedRoute({ children }: { children: ReactNode }) {
-  const { isLoggedIn } = useAuth()
+  const { isLoggedIn, loading } = useAuth()
+  if (loading) return <LoadingScreen />
   if (!isLoggedIn) return <Navigate to="/login" replace />
   return <>{children}</>
 }
@@ -26,7 +35,9 @@ function AppLayout({ children }: { children: ReactNode }) {
 }
 
 function AppRoutes() {
-  const { isLoggedIn } = useAuth()
+  const { isLoggedIn, loading } = useAuth()
+
+  if (loading) return <LoadingScreen />
 
   return (
     <Routes>

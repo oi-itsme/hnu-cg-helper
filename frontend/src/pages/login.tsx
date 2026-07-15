@@ -35,8 +35,8 @@ export default function LoginPage() {
     setError('')
     setLoading(true)
     try {
-      const data = await login(stuId, password, captchaCode, sessionId)
-      authLogin(data.token)
+      await login(stuId, password, captchaCode, sessionId)
+      authLogin()
       navigate('/courses')
     } catch (err) {
       const msg = err instanceof Error ? err.message : '登录失败'
