@@ -39,7 +39,7 @@ jobs:
 
       - uses: pnpm/action-setup@v4
         with:
-          version: "11.9.0"
+          package_json_file: "frontend/package.json"
 
       - name: Install frontend dependencies
         run: cd frontend && pnpm install --frozen-lockfile
