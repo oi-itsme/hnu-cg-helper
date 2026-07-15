@@ -1,10 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
 import { getCourses, type Course } from '@/lib/api'
+import { useAuth } from '@/stores/auth'
 
 export default function CoursesPage() {
   const navigate = useNavigate()
+  const { logout } = useAuth()
   const { data: courses, isLoading, error } = useQuery<Course[]>({
     queryKey: ['courses'],
     queryFn: getCourses,
@@ -20,8 +23,11 @@ export default function CoursesPage() {
 
   if (error) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4">
         <p className="text-destructive">加载失败: {error.message}</p>
+        <Button variant="outline" onClick={() => { logout(); navigate('/login') }}>
+          退出登录
+        </Button>
       </div>
     )
   }
