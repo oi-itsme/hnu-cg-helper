@@ -7,6 +7,10 @@ edition = "2024"
 default = ["embed-frontend"]
 embed-frontend = []
 
+[[bin]]
+name = "hnu-cg-helper-webui"
+path = "src/main.rs"
+
 [dependencies]
 hnu-cg-helper-core = { path = "../core" }
 axum = { version = "0.8", features = ["macros"] }
