@@ -50,21 +50,21 @@ export function Sidebar() {
       <ScrollArea className="flex-1">
         <nav className="p-2">
           {courses?.map((c) => (
-            <div key={c.course_id}>
+            <div key={c.id}>
               <button
                 type="button"
                 className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-sm hover:bg-muted"
-                onClick={() => toggleCourse(c.course_id)}
+                onClick={() => toggleCourse(c.id)}
               >
-                <span className="truncate text-left">{c.course_name}</span>
+                <span className="truncate text-left">{c.name}</span>
                 <span className="ml-1 text-xs text-muted-foreground">
-                  {expandedCourse === c.course_id ? '▾' : '▸'}
+                  {expandedCourse === c.id ? '▾' : '▸'}
                 </span>
               </button>
-              {expandedCourse === c.course_id && (
+              {expandedCourse === c.id && (
                 <div className="ml-3 border-l pl-2">
                   <NavLink
-                    to={`/courses/${c.course_id}/assignments`}
+                    to={`/courses/${c.id}/assignments`}
                     className={({ isActive }) =>
                       `block rounded px-3 py-1.5 text-sm ${
                         isActive
@@ -75,10 +75,10 @@ export function Sidebar() {
                   >
                     作业列表
                   </NavLink>
-                  {expandedAssignments.get(c.course_id)?.map((a) => (
+                  {expandedAssignments.get(c.id)?.map((a) => (
                     <NavLink
-                      key={a.assign_id}
-                      to={`/courses/${c.course_id}/assignments/${a.assign_id}/problems`}
+                      key={a.id}
+                      to={`/courses/${c.id}/assignments/${a.id}/problems`}
                       className={({ isActive }) =>
                         `block rounded px-3 py-1.5 text-xs ${
                           isActive
@@ -87,7 +87,7 @@ export function Sidebar() {
                         }`
                       }
                     >
-                      {a.assign_name}
+                      {a.name}
                     </NavLink>
                   ))}
                 </div>

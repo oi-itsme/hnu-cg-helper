@@ -84,8 +84,8 @@ export function login(stu_id: string, password: string, captcha_code: string, se
 
 // Courses
 export interface Course {
-  course_id: number
-  course_name: string
+  id: number
+  name: string
 }
 
 export function getCourses(): Promise<Course[]> {
@@ -93,8 +93,8 @@ export function getCourses(): Promise<Course[]> {
 }
 
 export interface Assignment {
-  assign_id: number
-  assign_name: string
+  id: number
+  name: string
 }
 
 export function getAssignments(courseId: number): Promise<Assignment[]> {

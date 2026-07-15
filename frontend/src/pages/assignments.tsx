@@ -41,15 +41,15 @@ export default function AssignmentsPage() {
       <div className="grid gap-4">
         {data?.map((a) => (
           <Card
-            key={a.assign_id}
+            key={a.id}
             className="cursor-pointer transition-shadow hover:shadow-md"
-            onClick={() => navigate(`/courses/${cid}/assignments/${a.assign_id}/problems`)}
+            onClick={() => navigate(`/courses/${cid}/assignments/${a.id}/problems`)}
           >
             <CardHeader>
-              <CardTitle className="text-lg">{a.assign_name}</CardTitle>
+              <CardTitle className="text-lg">{a.name}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">作业 ID: {a.assign_id}</p>
+              <p className="text-sm text-muted-foreground">作业 ID: {a.id}</p>
             </CardContent>
           </Card>
         ))}

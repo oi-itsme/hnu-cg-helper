@@ -32,15 +32,15 @@ export default function CoursesPage() {
       <div className="grid gap-4">
         {courses?.map((course) => (
           <Card
-            key={course.course_id}
+            key={course.id}
             className="cursor-pointer transition-shadow hover:shadow-md"
-            onClick={() => navigate(`/courses/${course.course_id}/assignments`)}
+            onClick={() => navigate(`/courses/${course.id}/assignments`)}
           >
             <CardHeader>
-              <CardTitle className="text-lg">{course.course_name}</CardTitle>
+              <CardTitle className="text-lg">{course.name}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted-foreground">课程 ID: {course.course_id}</p>
+              <p className="text-sm text-muted-foreground">课程 ID: {course.id}</p>
             </CardContent>
           </Card>
         ))}
