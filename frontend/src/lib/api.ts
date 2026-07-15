@@ -140,7 +140,8 @@ export async function* streamChat(
   })
 
   if (!res.ok) {
-    throw new ApiError('AI request failed', res.status)
+    const err = await res.json().catch(() => ({ error: res.statusText }))
+    throw new ApiError(err.error || res.statusText, res.status)
   }
 
   const reader = res.body?.getReader()

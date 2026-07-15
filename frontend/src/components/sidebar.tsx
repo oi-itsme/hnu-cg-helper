@@ -35,8 +35,8 @@ export function Sidebar() {
       const next = new Map(expandedAssignments)
       next.set(courseId, assignments)
       setExpandedAssignments(next)
-    } catch {
-      // ignore
+    } catch (e) {
+      console.error('Failed to load assignments:', e)
     }
   }
 
