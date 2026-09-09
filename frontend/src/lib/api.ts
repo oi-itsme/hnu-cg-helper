@@ -89,8 +89,8 @@ export function getAssignments(courseId: number): Promise<Assignment[]> {
 }
 
 export interface Problem {
-  pro_num: number
-  problem_id: number
+  index: number
+  id: number
   title: string
   score: number
 }

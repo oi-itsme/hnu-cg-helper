@@ -14,9 +14,7 @@ pub(crate) struct AuthStatusResponse {
 /// GET /api/auth/status
 ///
 /// 检查是否已登录（token 存在且有效）。
-pub async fn auth_status(
-    State(state): State<AppState>,
-) -> Json<AuthStatusResponse> {
+pub async fn auth_status(State(state): State<AppState>) -> Json<AuthStatusResponse> {
     let token = state.current_token.read().await;
     Json(AuthStatusResponse {
         authenticated: token.is_some(),
@@ -93,9 +91,7 @@ pub async fn do_login(
 /// POST /api/auth/logout
 ///
 /// 清除当前登录状态。
-pub async fn logout(
-    State(state): State<AppState>,
-) -> Json<LoginResponse> {
+pub async fn logout(State(state): State<AppState>) -> Json<LoginResponse> {
     *state.current_token.write().await = None;
     Json(LoginResponse { success: true })
 }

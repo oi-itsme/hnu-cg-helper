@@ -13,19 +13,14 @@ use crate::state::AppState;
 async fn token_from_state(
     state: &AppState,
 ) -> Result<CgToken, (StatusCode, Json<hnu_cg_helper_core::error::ErrorResponse>)> {
-    state
-        .current_token
-        .read()
-        .await
-        .clone()
-        .ok_or_else(|| {
-            (
-                StatusCode::UNAUTHORIZED,
-                Json(hnu_cg_helper_core::error::ErrorResponse {
-                    error: "Not authenticated".into(),
-                }),
-            )
-        })
+    state.current_token.read().await.clone().ok_or_else(|| {
+        (
+            StatusCode::UNAUTHORIZED,
+            Json(hnu_cg_helper_core::error::ErrorResponse {
+                error: "Not authenticated".into(),
+            }),
+        )
+    })
 }
 
 /// GET /api/courses

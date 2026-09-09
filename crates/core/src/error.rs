@@ -1,18 +1,23 @@
 use hnu_query::Error as HnuError;
-use hnu_query::cg::error::CgError;
+use hnu_query::cg::error::TokenExpired;
 use hnu_query::cg::login::LoginError;
 use serde::Serialize;
+use std::convert::Infallible;
 
 /// Core crate 统一错误类型
 #[derive(thiserror::Error, Debug)]
 pub enum CoreError {
-    /// hnu_query 库错误
-    #[error("CG 系统错误: {0}")]
-    Cg(#[from] HnuError<CgError>),
+    /// CG 令牌过期
+    #[error("CG 令牌已过期，请重新登录: {0}")]
+    TokenExpired(#[from] HnuError<TokenExpired>),
 
     /// 登录错误
     #[error("登录失败: {0}")]
     Login(#[from] HnuError<LoginError>),
+
+    /// 会话创建错误（获取验证码等）
+    #[error("会话创建失败: {0}")]
+    Session(#[from] HnuError<Infallible>),
 
     /// AI API 错误
     #[error("AI 服务错误: {0}")]

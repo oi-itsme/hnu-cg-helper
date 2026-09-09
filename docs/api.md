@@ -64,7 +64,7 @@ Token 通过登录接口获取，是 `CgToken` 的 JSON 序列化 + base64 编�
 **Response** `200`:
 ```json
 [
-  { "course_id": 123, "course_name": "课程名" }
+  { "id": 123, "name": "课程名" }
 ]
 ```
 
@@ -75,7 +75,7 @@ Token 通过登录接口获取，是 `CgToken` 的 JSON 序列化 + base64 编�
 **Response** `200`:
 ```json
 [
-  { "assign_id": 456, "assign_name": "作业名" }
+  { "id": 456, "name": "作业名" }
 ]
 ```
 
@@ -86,7 +86,7 @@ Token 通过登录接口获取，是 `CgToken` 的 JSON 序列化 + base64 编�
 **Response** `200`:
 ```json
 [
-  { "pro_num": 1, "problem_id": 789, "title": "题目标题", "score": 10.0 }
+  { "index": 1, "id": 789, "title": "题目标题", "score": 10.0 }
 ]
 ```
 
