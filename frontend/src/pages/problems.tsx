@@ -42,18 +42,18 @@ export default function ProblemsPage() {
       <div className="grid gap-4">
         {data?.map((p) => (
           <Link
-            key={p.pro_num}
-            to={`/courses/${cid}/assignments/${aid}/problems/${p.pro_num}`}
+            key={p.index}
+            to={`/courses/${cid}/assignments/${aid}/problems/${p.index}`}
           >
             <Card className="transition-shadow hover:shadow-md">
               <CardHeader>
                 <CardTitle className="text-lg">
-                  #{p.pro_num} {p.title}
+                  #{p.index} {p.title}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  分值: {p.score} | 题目 ID: {p.problem_id}
+                  分值: {p.score} | 题目 ID: {p.id}
                 </p>
               </CardContent>
             </Card>

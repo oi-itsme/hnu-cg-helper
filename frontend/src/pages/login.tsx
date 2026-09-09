@@ -35,12 +35,13 @@ export default function LoginPage() {
     setError('')
     setLoading(true)
     try {
-      const data = await login(stuId, password, captchaCode, sessionId)
-      authLogin(data.token)
+      await login(stuId, password, captchaCode, sessionId)
+      authLogin()
       navigate('/courses')
     } catch (err) {
-      setError(err instanceof Error ? err.message : '登录失败')
-      fetchCaptcha() // refresh captcha on failure
+      const msg = err instanceof Error ? err.message : '登录失败'
+      await fetchCaptcha()
+      setError(msg)
     } finally {
       setLoading(false)
     }

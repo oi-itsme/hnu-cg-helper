@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { getProblemPage } from '@/lib/api'
 
@@ -28,11 +28,7 @@ export default function ProblemPage() {
   }
 
   if (error) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <p className="text-destructive">加载失败: {error.message}</p>
-      </div>
-    )
+    return <Navigate to="/courses" replace />
   }
 
   return (

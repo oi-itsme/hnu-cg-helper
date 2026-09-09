@@ -32,10 +32,17 @@ fn load_key_from_keyring() -> (Option<[u8; 32]>, bool) {
     let entry = match keyring::Entry::new(KEYRING_SERVICE, KEYRING_ACCOUNT) {
         Ok(e) => e,
         Err(_) => {
-            tracing::warn!("OS keyring 不可用，凭据加密功能已禁用");
+            tracing::warn!("OS 密钥环不可用，凭据加密功能已禁用");
             return (None, false);
         }
     };
+
+    // 检测实际使用的密钥环后端
+    let backend_name = entry
+        .get_credential()
+        .downcast_ref::<keyring::mock::MockCredential>()
+        .map(|_| "mock (in-memory)")
+        .unwrap_or("平台原生密钥环");
 
     match entry.get_password() {
         Ok(stored) => {
@@ -44,11 +51,12 @@ fn load_key_from_keyring() -> (Option<[u8; 32]>, bool) {
                 Ok(bytes) if bytes.len() == 32 => {
                     let mut key = [0u8; 32];
                     key.copy_from_slice(&bytes);
+                    tracing::info!("已从 {backend_name} 读取加密密钥");
                     (Some(key), true)
                 }
                 _ => {
                     // Corrupted key data — regenerate
-                    tracing::warn!("密钥环中的密钥已损坏，正在重新生成");
+                    tracing::warn!("{backend_name} 中的密钥已损坏，正在重新生成");
                     let key = generate_key();
                     let _ = entry.set_password(&BASE64.encode(key));
                     (Some(key), true)
@@ -60,17 +68,17 @@ fn load_key_from_keyring() -> (Option<[u8; 32]>, bool) {
             let key = generate_key();
             match entry.set_password(&BASE64.encode(key)) {
                 Ok(()) => {
-                    tracing::info!("已在 OS 密钥环中生成新的加密密钥");
+                    tracing::info!("已在 {backend_name} 中生成新的加密密钥");
                     (Some(key), true)
                 }
                 Err(e) => {
-                    tracing::warn!("无法将密钥写入 OS 密钥环: {e}，凭据将无法持久化");
+                    tracing::warn!("无法将密钥写入 {backend_name}: {e}，凭据将无法持久化");
                     (Some(key), false)
                 }
             }
         }
         Err(e) => {
-            tracing::warn!("无法访问 OS 密钥环: {e}，凭据加密功能已禁用");
+            tracing::warn!("无法访问 {backend_name}: {e}，凭据加密功能已禁用");
             (None, false)
         }
     }

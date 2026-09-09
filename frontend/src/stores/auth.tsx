@@ -1,29 +1,37 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from 'react'
-import { setToken, clearToken, hasToken } from '@/lib/api'
+import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
+import { getAuthStatus, logout as apiLogout } from '@/lib/api'
 
 interface AuthState {
   isLoggedIn: boolean
-  login: (token: string) => void
+  loading: boolean
+  login: () => void
   logout: () => void
 }
 
 const AuthContext = createContext<AuthState | null>(null)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(hasToken())
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [loading, setLoading] = useState(true)
 
-  const login = useCallback((token: string) => {
-    setToken(token)
+  useEffect(() => {
+    getAuthStatus()
+      .then((res) => setIsLoggedIn(res.authenticated))
+      .catch(() => setIsLoggedIn(false))
+      .finally(() => setLoading(false))
+  }, [])
+
+  const login = useCallback(() => {
     setIsLoggedIn(true)
   }, [])
 
   const logout = useCallback(() => {
-    clearToken()
+    apiLogout().catch(() => {})
     setIsLoggedIn(false)
   }, [])
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={{ isLoggedIn, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   )

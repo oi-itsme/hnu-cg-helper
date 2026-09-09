@@ -1,4 +1,4 @@
-use hnu_cg_helper_core::{CgSession, ConfigManager};
+use hnu_cg_helper_core::{CgSession, CgToken, ConfigManager};
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::sync::Arc;
@@ -17,6 +17,8 @@ pub struct PendingSession {
 pub struct AppState {
     /// 待登录的 session 映射 (session_id → PendingSession)
     pub pending_sessions: Arc<RwLock<HashMap<String, PendingSession>>>,
+    /// 当前登录的 CG token（进程内存，重启丢失）
+    pub current_token: Arc<RwLock<Option<CgToken>>>,
     /// 全局配置管理器
     pub config: Arc<RwLock<ConfigManager>>,
 }
@@ -32,6 +34,7 @@ impl AppState {
 
         Self {
             pending_sessions: Arc::new(RwLock::new(HashMap::new())),
+            current_token: Arc::new(RwLock::new(None)),
             config: Arc::new(RwLock::new(config_manager)),
         }
     }

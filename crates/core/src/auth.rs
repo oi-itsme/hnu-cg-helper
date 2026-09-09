@@ -1,4 +1,4 @@
-use hnu_query::cg::{CgSession, CgToken};
+use hnu_query::cg::login::{CgSession, CgToken};
 use reqwest::header::{COOKIE, HeaderMap, HeaderValue};
 use serde::{Deserialize, Serialize};
 

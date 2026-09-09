@@ -15,29 +15,8 @@ class ApiError extends Error {
   }
 }
 
-function getToken(): string | null {
-  return localStorage.getItem('cg_token')
-}
-
-export function setToken(token: string) {
-  localStorage.setItem('cg_token', token)
-}
-
-export function clearToken() {
-  localStorage.removeItem('cg_token')
-}
-
-export function hasToken(): boolean {
-  return getToken() !== null
-}
-
 async function request<T>(path: string, opts: RequestOptions = {}): Promise<T> {
   const { method = 'GET', body, headers = {} } = opts
-
-  const token = getToken()
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`
-  }
 
   const init: RequestInit = {
     method,
@@ -67,25 +46,33 @@ export interface CaptchaResponse {
   captcha_image: string
 }
 
-export interface LoginResponse {
-  token: string
-}
-
 export function getCaptcha(): Promise<CaptchaResponse> {
   return request('/auth/captcha', { method: 'POST' })
 }
 
-export function login(stu_id: string, password: string, captcha_code: string, session_id: string): Promise<LoginResponse> {
+export function login(stu_id: string, password: string, captcha_code: string, session_id: string): Promise<void> {
   return request('/auth/login', {
     method: 'POST',
     body: { session_id, stu_id, password, captcha_code },
   })
 }
 
+export function logout(): Promise<void> {
+  return request('/auth/logout', { method: 'POST' })
+}
+
+export interface AuthStatus {
+  authenticated: boolean
+}
+
+export function getAuthStatus(): Promise<AuthStatus> {
+  return request('/auth/status')
+}
+
 // Courses
 export interface Course {
-  course_id: number
-  course_name: string
+  id: number
+  name: string
 }
 
 export function getCourses(): Promise<Course[]> {
@@ -93,8 +80,8 @@ export function getCourses(): Promise<Course[]> {
 }
 
 export interface Assignment {
-  assign_id: number
-  assign_name: string
+  id: number
+  name: string
 }
 
 export function getAssignments(courseId: number): Promise<Assignment[]> {
@@ -102,8 +89,8 @@ export function getAssignments(courseId: number): Promise<Assignment[]> {
 }
 
 export interface Problem {
-  pro_num: number
-  problem_id: number
+  index: number
+  id: number
   title: string
   score: number
 }
@@ -140,7 +127,8 @@ export async function* streamChat(
   })
 
   if (!res.ok) {
-    throw new ApiError('AI request failed', res.status)
+    const err = await res.json().catch(() => ({ error: res.statusText }))
+    throw new ApiError(err.error || res.statusText, res.status)
   }
 
   const reader = res.body?.getReader()

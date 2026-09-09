@@ -13,8 +13,8 @@
 前端代码变动频繁，用 Vite dev server 获得热更新（HMR）：
 
 ```bash
-# 终端 1: 启动后端
-cargo run -p hnu-cg-helper-server
+# 终端 1: 启动后端（--no-default-features 跳过前端嵌入，API-only 模式）
+cargo run -p hnu-cg-helper-server --no-default-features
 # 监听 localhost:20365
 
 # 终端 2: 启动前端 dev server
