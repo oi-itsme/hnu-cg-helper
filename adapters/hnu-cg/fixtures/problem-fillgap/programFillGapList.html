@@ -1,0 +1,241 @@
+<!DOCTYPE html><html><body><div class="cgProblemContentClass"><p>【问题描述】<br></p><p>&nbsp; &nbsp; &nbsp; &nbsp;矩阵是线性代数中的重要概念，应用领域非常广泛，在C/C++中，通常将矩阵定义为一个二维数组。</p><p>&nbsp; &nbsp; &nbsp; &nbsp;本问题中，将输入两个矩阵&nbsp;<span style="font-family: &quot;times new roman&quot;;"><em><strong>A&nbsp;</strong></em></span>和&nbsp;<span style="font-family: &quot;times new roman&quot;;"><em><strong>B</strong></em></span>，实现对矩阵的数乘、矩阵加法、矩阵乘法以及行列式的计算。</p><p>&nbsp; &nbsp; &nbsp; &nbsp;如果对矩阵的算法不了解，请查阅相关资料。</p><p>【输入形式】</p><p>&nbsp; &nbsp; &nbsp; &nbsp;输入的第一行为两个正整数&nbsp;<span style="font-family: &quot;times new roman&quot;;"><em><strong>M&nbsp;</strong></em></span>和 <span style="font-family: &quot;times new roman&quot;;"><em><strong>N</strong></em></span>，分别表示矩阵 <span style="font-family: &quot;times new roman&quot;;"><em><strong>A</strong></em></span> 的行数和列数；<br></p><p>&nbsp; &nbsp; &nbsp; &nbsp;接下来的 <span style="font-family: &quot;times new roman&quot;;"><em><strong>M</strong></em></span> 行，每行 <span style="font-family: &quot;times new roman&quot;;"><em><strong>N</strong></em></span> 个用空格分隔的整数，表示矩阵<span style="font-family: &quot;times new roman&quot;;"><em><strong> A</strong></em></span> 的元素值；<br></p><p>&nbsp; &nbsp; &nbsp; &nbsp;接下来的一行，为一个整数&nbsp;<span style="font-family: &quot;times new roman&quot;;"><em><strong>x</strong></em></span>,&nbsp; 用于对矩阵 <span style="font-family: &quot;times new roman&quot;;"><em><strong>A</strong></em></span> 进行数乘；<br></p><p>&nbsp; &nbsp; &nbsp; &nbsp;接下来的一行为两个正整数 <span style="font-family: &quot;times new roman&quot;;"><em><strong>K</strong></em></span> 和 <span style="font-family: &quot;times new roman&quot;;"><em><strong>L</strong></em></span>, 分别表示矩阵 <span style="font-family: &quot;times new roman&quot;;"><em><strong>B</strong></em></span> 的行数和列数；<br></p><p>&nbsp; &nbsp; &nbsp; &nbsp;接下来的 <span style="font-family: &quot;times new roman&quot;;"><em><strong>K</strong></em></span> 行，每行为 <span style="font-family: &quot;times new roman&quot;;"><em><strong>L</strong></em></span> 个用空格分隔的整数，表示矩阵 <span style="font-family: &quot;times new roman&quot;;"><em><strong>B</strong></em></span> 的元素值。<br></p><p>【输出形式】</p><p>&nbsp; &nbsp; &nbsp; &nbsp;输出的第一部分为<span style="font-family: &quot;times new roman&quot;;"><em><strong> M</strong></em></span> 行，每行为 <span style="font-family: &quot;times new roman&quot;;"><em><strong>N</strong></em></span> 个用空格分隔的整数，表示 <span style="font-family: &quot;times new roman&quot;;"><em><strong>x</strong></em></span> 数乘 <span style="font-family: &quot;times new roman&quot;;"><em><strong>A</strong></em></span> 的结果；<br></p><p>&nbsp; &nbsp; &nbsp; &nbsp;接下来(如果有），如果 <span style="font-family: &quot;times new roman&quot;;"><em><strong>A</strong></em></span> 和 <span style="font-family: &quot;times new roman&quot;;"><em><strong>B</strong></em></span> 可以相加，则输出 <span style="font-family: &quot;times new roman&quot;;"><em><strong>M</strong></em></span> 行，每行为 <span style="font-family: &quot;times new roman&quot;;"><em><strong>N</strong></em></span> 个用空格分隔的整数，表示矩阵 <span style="font-family: &quot;times new roman&quot;;"><em><strong>A</strong></em></span>+<span style="font-family: &quot;times new roman&quot;;"><em><strong>B</strong></em></span> 的结果；<br></p><p>&nbsp; &nbsp; &nbsp; &nbsp;接下来(如果有），如果 <span style="font-family: &quot;times new roman&quot;;"><em><strong>A</strong></em></span> 和 <span style="font-family: &quot;times new roman&quot;;"><em><strong>B</strong></em></span> 可以相乘，则输出 <span style="font-family: &quot;times new roman&quot;;"><em><strong>M</strong></em></span> 行，每行为 <span style="font-family: &quot;times new roman&quot;;"><em><strong>L </strong></em></span>个用空格分隔的整数，表示矩阵 <span style="font-family: &quot;times new roman&quot;;"><em><strong>A</strong></em></span>×<span style="font-family: &quot;times new roman&quot;;"><em><strong>B</strong></em></span> 的结果；<br></p><p>&nbsp; &nbsp; &nbsp; &nbsp;接下来一行(如果有），如果 <span style="font-family: &quot;times new roman&quot;;"><em><strong>A </strong></em></span>的行列式存在，则输出一个整数，表示 <span style="font-family: &quot;times new roman&quot;;"><em><strong>A</strong></em></span> 的行列式的值；<br></p><p>&nbsp; &nbsp; &nbsp; &nbsp;接下来一行(如果有），如果 <span style="font-family: &quot;times new roman&quot;;"><em><strong>B</strong></em></span> 的行列式存在，则输出一个整数，表示 <span style="font-family: &quot;times new roman&quot;;"><em><strong>B</strong></em></span> 的行列式的值。<br></p><p>【样例输入1】</p><pre class="brush:cpp;toolbar:false">2&nbsp;2
+29&nbsp;51
+7&nbsp;84
+9
+2&nbsp;9
+1&nbsp;1&nbsp;4&nbsp;8&nbsp;5&nbsp;7&nbsp;4&nbsp;5&nbsp;9
+2&nbsp;5&nbsp;5&nbsp;1&nbsp;6&nbsp;1&nbsp;4&nbsp;8&nbsp;6</pre><p>【样例输出1】<br></p><pre class="brush:cpp;toolbar:false">261&nbsp;459
+63&nbsp;756
+131&nbsp;284&nbsp;371&nbsp;283&nbsp;451&nbsp;254&nbsp;320&nbsp;553&nbsp;567
+175&nbsp;427&nbsp;448&nbsp;140&nbsp;539&nbsp;133&nbsp;364&nbsp;707&nbsp;567
+2079</pre><p style="white-space: normal;">【样例输入2】</p><pre class="brush:cpp;toolbar:false">5&nbsp;3
+71&nbsp;15&nbsp;54
+24&nbsp;56&nbsp;8
+61&nbsp;34&nbsp;50
+82&nbsp;94&nbsp;88
+48&nbsp;7&nbsp;43
+3
+5&nbsp;3
+2&nbsp;1&nbsp;5
+1&nbsp;7&nbsp;1
+0&nbsp;1&nbsp;6
+4&nbsp;1&nbsp;9
+2&nbsp;8&nbsp;7</pre><p style="white-space: normal;">【样例输出2】<br></p><pre class="brush:cpp;toolbar:false">213&nbsp;45&nbsp;162
+72&nbsp;168&nbsp;24
+183&nbsp;102&nbsp;150
+246&nbsp;282&nbsp;264
+144&nbsp;21&nbsp;129
+73&nbsp;16&nbsp;59
+25&nbsp;63&nbsp;9
+61&nbsp;35&nbsp;56
+86&nbsp;95&nbsp;97
+50&nbsp;15&nbsp;50</pre><p style="white-space: normal;">【样例输入3】</p><pre class="brush:cpp;toolbar:false">4&nbsp;4
+55&nbsp;73&nbsp;66&nbsp;16
+57&nbsp;65&nbsp;43&nbsp;25
+61&nbsp;3&nbsp;15&nbsp;4
+16&nbsp;94&nbsp;82&nbsp;48
+7
+4&nbsp;4
+6&nbsp;3&nbsp;6&nbsp;7
+7&nbsp;9&nbsp;5&nbsp;4
+8&nbsp;3&nbsp;1&nbsp;5
+5&nbsp;9&nbsp;1&nbsp;3</pre><p style="white-space: normal;">【样例输出3】<br></p><pre class="brush:cpp;toolbar:false">385&nbsp;511&nbsp;462&nbsp;112
+399&nbsp;455&nbsp;301&nbsp;175
+427&nbsp;21&nbsp;105&nbsp;28
+112&nbsp;658&nbsp;574&nbsp;336
+61&nbsp;76&nbsp;72&nbsp;23
+64&nbsp;74&nbsp;48&nbsp;29
+69&nbsp;6&nbsp;16&nbsp;9
+21&nbsp;103&nbsp;83&nbsp;51
+1449&nbsp;1164&nbsp;777&nbsp;1055
+1266&nbsp;1110&nbsp;735&nbsp;949
+527&nbsp;291&nbsp;400&nbsp;526
+1650&nbsp;1572&nbsp;696&nbsp;1042
+-2657450
+-783</pre><p style="white-space: normal;">【样例输入4】</p><pre class="brush:cpp;toolbar:false">5&nbsp;5
+0&nbsp;51&nbsp;71&nbsp;79&nbsp;28
+3&nbsp;10&nbsp;66&nbsp;36&nbsp;57
+23&nbsp;21&nbsp;6&nbsp;27&nbsp;85
+1&nbsp;21&nbsp;49&nbsp;62&nbsp;31
+54&nbsp;31&nbsp;47&nbsp;64&nbsp;21
+11
+4&nbsp;3
+3&nbsp;4&nbsp;5
+2&nbsp;6&nbsp;0
+7&nbsp;3&nbsp;9
+5&nbsp;6&nbsp;9</pre><p style="white-space: normal;">【样例输出4】<br></p><pre class="brush:cpp;toolbar:false">0&nbsp;561&nbsp;781&nbsp;869&nbsp;308
+33&nbsp;110&nbsp;726&nbsp;396&nbsp;627
+253&nbsp;231&nbsp;66&nbsp;297&nbsp;935
+11&nbsp;231&nbsp;539&nbsp;682&nbsp;341
+594&nbsp;341&nbsp;517&nbsp;704&nbsp;231
+-299004213</pre><p>【样例说明】<br>【评分标准】<br></p></div><form action="showProcessMsg.jsp" id="uploadFORM" method="post" name="uploadFORM" style="height: 92vh; position: relative; overflow: auto; font-size: 18px" target="showmessageFRAME">
+                                                <input name="doSubmit" type="hidden" value="true">
+                                                <input name="byCE" type="hidden" value="true">
+                                                <input name="wtime" type="hidden" value="0">
+                                                
+                                                <input name="progLanguage" type="hidden" value="c++">
+                                                <input name="problemID" type="hidden" value="22909">
+                                                <input name="assignID" type="hidden" value="1626">
+                                                <div id="cgsoucecode" style="width: 100%;height: 100%">
+                                                    		
+                                                    <div style="background-color: #f9f9f9;"><code class="cgcode c++">#include&nbsp;&lt;iostream&gt;
+#include&nbsp;&lt;cstdlib&gt;
+using&nbsp;namespace&nbsp;std;
+class&nbsp;matrix
+{
+private:
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;rows,&nbsp;cols;
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;**p;
+public:
+&nbsp;&nbsp;&nbsp;&nbsp;matrix();
+&nbsp;&nbsp;&nbsp;&nbsp;matrix(int&nbsp;&amp;M,&nbsp;int&nbsp;&amp;N);
+&nbsp;&nbsp;&nbsp;&nbsp;matrix(matrix&nbsp;&amp;A,&nbsp;int&nbsp;&amp;&amp;m,&nbsp;int&nbsp;&amp;n);
+&nbsp;&nbsp;&nbsp;&nbsp;~matrix();
+
+&nbsp;&nbsp;&nbsp;&nbsp;matrix&nbsp;multi(int&nbsp;x);&nbsp;&nbsp;&nbsp;//&nbsp;数乘
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;det();&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;计算行列式
+&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;out();&nbsp;&nbsp;&nbsp;&nbsp;//输出矩阵
+&nbsp;&nbsp;&nbsp;&nbsp;void&nbsp;input();
+
+&nbsp;&nbsp;&nbsp;&nbsp;matrix&nbsp;operator+(matrix&nbsp;&amp;another);&nbsp;//重载加法运算实现矩阵相加
+&nbsp;&nbsp;&nbsp;&nbsp;matrix&nbsp;operator*(matrix&nbsp;&amp;another);&nbsp;//重载乘法运算实现矩阵相乘
+};
+matrix::matrix(int&nbsp;&amp;M,&nbsp;int&nbsp;&amp;N)
+{
+&nbsp;&nbsp;&nbsp;&nbsp;rows=M,&nbsp;cols=N;
+&nbsp;&nbsp;&nbsp;&nbsp;p=new&nbsp;int*[rows];
+&nbsp;&nbsp;&nbsp;&nbsp;for(int&nbsp;i=0;i&lt;M;i++)
+&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;p[i]=new&nbsp;int[cols];
+&nbsp;&nbsp;&nbsp;&nbsp;}
+}
+
+matrix::matrix(matrix&nbsp;&amp;A,&nbsp;int&nbsp;&amp;&amp;m,&nbsp;int&nbsp;&amp;n)&nbsp;&nbsp;&nbsp;//从矩阵A中删除第m行第n列后得到新的矩阵
+{
+&nbsp;&nbsp;&nbsp;&nbsp;</code><textarea cols="6" name="answer1" rows="25"></textarea><code class="cgcode c++">
+}
+
+matrix::~matrix()
+{
+&nbsp;&nbsp;&nbsp;&nbsp;for(int&nbsp;i=0;&nbsp;i&lt;rows;&nbsp;i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;delete[]&nbsp;p[i];
+
+&nbsp;&nbsp;&nbsp;&nbsp;delete[]&nbsp;p;
+}
+
+matrix&nbsp;matrix::multi(int&nbsp;x)&nbsp;&nbsp;&nbsp;//&nbsp;数乘
+{
+&nbsp;&nbsp;&nbsp;&nbsp;matrix&nbsp;tmp(rows,&nbsp;cols);
+&nbsp;&nbsp;&nbsp;&nbsp;</code><textarea cols="60" name="answer2" rows="6"></textarea><code class="cgcode c++">
+&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;tmp;
+}
+
+void&nbsp;matrix::out()&nbsp;&nbsp;&nbsp;&nbsp;//输出矩阵
+{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;逐行输出，数据间用空格分隔&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;</code><textarea cols="60" name="answer3" rows="6"></textarea><code class="cgcode c++">
+}
+
+void&nbsp;matrix::input()
+{
+&nbsp;&nbsp;&nbsp;&nbsp;for(int&nbsp;i=0;&nbsp;i&lt;rows;&nbsp;i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(int&nbsp;j=0;&nbsp;j&lt;cols;&nbsp;j++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cin&gt;&gt;p[i][j];
+
+}
+
+matrix&nbsp;matrix::operator+(matrix&nbsp;&amp;another)&nbsp;//重载加法运算实现矩阵相加
+{
+&nbsp;&nbsp;&nbsp;&nbsp;matrix&nbsp;tmp(rows,&nbsp;cols);
+&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;矩阵对应位置元素相加&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;</code><textarea cols="60" name="answer4" rows="6"></textarea><code class="cgcode c++">
+&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;tmp;
+}
+
+matrix&nbsp;matrix::operator*(matrix&nbsp;&amp;another)&nbsp;&nbsp;//重载乘法运算实现矩阵相乘
+{
+&nbsp;&nbsp;&nbsp;&nbsp;matrix&nbsp;tmp(rows,&nbsp;another.cols);
+&nbsp;&nbsp;&nbsp;&nbsp;for(int&nbsp;i=0;&nbsp;i&lt;rows;&nbsp;i++)
+&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(int&nbsp;j=0;&nbsp;j&lt;another.cols;&nbsp;j++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;计算A矩阵的第i行与B矩阵的第j列元素对应相乘后之和，作为新矩阵的第i行第j列元素的值&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><textarea cols="60" name="answer5" rows="6"></textarea><code class="cgcode c++">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;tmp;
+}
+
+int&nbsp;matrix::det()
+{
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(rows==1)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;p[0][0];
+&nbsp;&nbsp;&nbsp;&nbsp;else
+&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;result=0,&nbsp;flag;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for(int&nbsp;i=0;&nbsp;i&lt;cols;&nbsp;i++)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;flag=(i%2)?-1:1;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matrix&nbsp;tmp(*this,&nbsp;0,&nbsp;i);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result=result+flag*p[0][i]*tmp.det();&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;使用代数余子式求行列式的值,&nbsp;递归
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;result;
+&nbsp;&nbsp;&nbsp;&nbsp;}
+}
+int&nbsp;main()
+{
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;M,N;
+
+&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;A矩阵的行和列
+&nbsp;&nbsp;&nbsp;&nbsp;cin&gt;&gt;M&gt;&gt;N;
+
+&nbsp;&nbsp;&nbsp;&nbsp;matrix&nbsp;mA(M,&nbsp;N);&nbsp;&nbsp;&nbsp;&nbsp;//生成A矩阵
+
+&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;输入矩阵值
+
+&nbsp;&nbsp;&nbsp;&nbsp;mA.input();
+
+&nbsp;&nbsp;&nbsp;&nbsp;//&nbsp;输入数乘值
+
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;x;
+&nbsp;&nbsp;&nbsp;&nbsp;cin&gt;&gt;x;
+
+&nbsp;&nbsp;&nbsp;&nbsp;matrix&nbsp;mm1=mA.multi(x);
+
+&nbsp;&nbsp;&nbsp;&nbsp;mm1.out();
+
+&nbsp;&nbsp;&nbsp;&nbsp;//B矩阵的行和列
+&nbsp;&nbsp;&nbsp;&nbsp;int&nbsp;K,&nbsp;L;
+&nbsp;&nbsp;&nbsp;&nbsp;cin&gt;&gt;K&gt;&gt;L;
+
+&nbsp;&nbsp;&nbsp;&nbsp;matrix&nbsp;mB(K,&nbsp;L);&nbsp;&nbsp;//生成B矩阵
+&nbsp;&nbsp;&nbsp;&nbsp;mB.input();
+
+&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;求矩阵A和矩阵B的和&nbsp;*/
+
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(M==K&nbsp;&amp;&amp;&nbsp;N==L)
+&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matrix&nbsp;mm2=mA+mB;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mm2.out();
+&nbsp;&nbsp;&nbsp;&nbsp;}
+
+&nbsp;&nbsp;&nbsp;/*&nbsp;求矩阵A和矩阵B的乘积矩阵&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(N==K)
+&nbsp;&nbsp;&nbsp;&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;matrix&nbsp;mm3=mA*mB;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mm3.out();
+&nbsp;&nbsp;&nbsp;&nbsp;}
+
+&nbsp;&nbsp;&nbsp;&nbsp;/*&nbsp;矩阵A的行列式的值&nbsp;*/
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(M==N)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout&lt;&lt;mA.det()&lt;&lt;endl;
+
+&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(K==L)
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cout&lt;&lt;mB.det()&lt;&lt;endl;
+
+&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;0;
+}
+</code></div> 
+                                                    <br><br><br><br><br><br><br>   
+                                                </div>
+                                            </form></body></html>

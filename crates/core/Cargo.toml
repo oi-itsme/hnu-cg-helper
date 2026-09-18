@@ -5,6 +5,7 @@ edition = "2024"
 
 [dependencies]
 hnu_query = "5.1.3"
+hnu-cg-helper-adapter = { path = "../adapter" }
 serde = { workspace = true }
 serde_json = { workspace = true }
 thiserror = { workspace = true }

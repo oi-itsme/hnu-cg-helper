@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider, useAuth } from '@/stores/auth'
+import { ProblemContextProvider } from '@/stores/problem-context'
 import type { ReactNode } from 'react'
 import LoginPage from '@/pages/login'
 import CoursesPage from '@/pages/courses'
@@ -85,7 +86,9 @@ function AppRoutes() {
 export default function App() {
   return (
     <AuthProvider>
-      <AppRoutes />
+      <ProblemContextProvider>
+        <AppRoutes />
+      </ProblemContextProvider>
     </AuthProvider>
   )
 }

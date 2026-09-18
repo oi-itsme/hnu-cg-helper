@@ -1,0 +1,21 @@
+[package]
+name = "hnu-cg-helper-adapter"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+rquickjs = { version = "0.13", features = ["loader"] }
+scraper = "0.24"
+ego-tree = "0.10"
+ammonia = "4"
+url = "2"
+regex = "1"
+toml = "0.8"
+notify = "8"
+arc-swap = "1"
+
+[dev-dependencies]

@@ -11,6 +11,8 @@ hnu-cg-helper 是一个 CG 做题系统辅助客户端。
 
 - `crates/core/` — 共享业务逻辑，封装 hnu_query
 - `crates/server/` — HTTP API 服务（axum）
+- `crates/adapter/` — 站点适配框架（QuickJS 沙箱脚本层，见 docs/adapter-framework.md）
+- `adapters/` — 站点适配包（配置 + 脚本 + fixtures）
 - `frontend/` — React SPA（Vite + shadcn/ui）
 - `docs/` — 项目文档
 - `src-tauri/` — Tauri 桌面端

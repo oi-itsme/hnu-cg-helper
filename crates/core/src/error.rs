@@ -23,6 +23,14 @@ pub enum CoreError {
     #[error("AI 服务错误: {0}")]
     Ai(String),
 
+    /// 适配框架错误
+    #[error("{0}")]
+    Adapter(#[from] hnu_cg_helper_adapter::AdapterError),
+
+    /// 提交执行错误
+    #[error("提交失败: {0}")]
+    Submit(String),
+
     /// 网络请求错误
     #[error("网络错误: {0}")]
     Network(#[from] reqwest::Error),

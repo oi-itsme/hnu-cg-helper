@@ -8,13 +8,7 @@ Base URL: `http://localhost:20365/api`
 
 ## 认证
 
-除 ai 相关端点外，所有接口均需在 HTTP Header 中携带 token：
-
-```
-Authorization: Bearer <base64_encoded_token_json>
-```
-
-Token 通过登录接口获取，是 `CgToken` 的 JSON 序列化 + base64 编码。
+登录成功后 token 保存在服务端内存（单用户本地应用），后续请求无需携带凭证。
 
 ---
 
@@ -49,7 +43,7 @@ Token 通过登录接口获取，是 `CgToken` 的 JSON 序列化 + base64 编�
 **Response** `200`:
 ```json
 {
-  "token": "base64-encoded-token-json"
+  "success": true
 }
 ```
 
@@ -92,14 +86,76 @@ Token 通过登录接口获取，是 `CgToken` 的 JSON 序列化 + base64 编�
 
 ### `GET /api/courses/{course_id}/assignments/{assign_id}/problems/{pro_num}`
 
-获取题目详情页 HTML。
+获取题目页结构化输出（经站点适配框架解析，见 [adapter-framework.md](adapter-framework.md)）。
 
 **Response** `200`:
 ```json
 {
-  "html": "<div>题目内容...</div>"
+  "page_type": "problem-program",
+  "statement_html": "<p>语义化题面...</p>",
+  "statement_text": "题面纯文本...",
+  "submission": {
+    "kind": "file_upload",
+    "languages": [{ "value": "c", "label": "c" }],
+    "needs_main_class": true,
+    "problem_id": 22677,
+    "assign_id": 1609
+  }
 }
 ```
+
+`submission.kind` 为 `fill_gap` 时字段为 `languages` / `gaps` / `skeleton` / `hidden_fields` / `problem_id` / `assign_id`。
+
+**Errors**: `422` 解析失败，响应体：
+```json
+{ "error": "错误信息", "repairable": true, "page_type": "problem-program" }
+```
+`repairable=true` 表示脚本层故障，可调用 `/api/adapter/repair` 尝试 AI 修复。
+
+### `POST /api/courses/{course_id}/assignments/{assign_id}/problems/{pro_num}/submit`
+
+提交作答。服务端用提交脚本生成提交计划并带 CG 会话执行。
+
+**Request**:
+```json
+{
+  "page_type": "problem-program",
+  "descriptor": { "kind": "file_upload", "...": "GET 返回的 submission 原样回传" },
+  "language": "c++",
+  "main_class": null,
+  "code": "源代码（file_upload 时）",
+  "answers": { "answer1": "..." },
+  "wtime": 120
+}
+```
+
+**Response** `200`:
+```json
+{ "result_html": "CG 结果页原始 HTML（前端沙箱 iframe 展示）" }
+```
+
+**Errors**: `400` 请求体不合法（descriptor 形状/类型不符，problem_id/assign_id 为 u64）；`422` descriptor 与 URL 路径不一致（assign_id 不符，或 problem_id 与题目序号映射不符，需刷新页面重试）
+
+### `POST /api/adapter/repair`
+
+AI 修复端点：读取留存的失败现场，驱动"LLM 改脚本 → 验证 → 热重载"循环，SSE 推送进度。
+
+**Request**:
+```json
+{ "page_type": "problem-program" }
+```
+
+**Response** `200` (text/event-stream):
+```
+data: {"stage":"attempt","attempt":1,"message":"第 1/3 轮：请求 AI 重写脚本…"}
+data: {"stage":"validating","attempt":1,"message":"收到候选脚本，正在沙箱中验证…"}
+data: {"stage":"done","attempt":1,"message":"验证全部通过，新脚本已生效。刷新页面即可。"}
+```
+
+`stage` 取值：`attempt` / `validating` / `done` / `failed`。
+
+**Errors**: `404` 未知页面类型（page_type 白名单校验，必须是适配包 manifest 中已知的 id）或无该题型失败现场；`400` 未配置 AI API Key
+
 
 ### `POST /api/ai/chat`
 

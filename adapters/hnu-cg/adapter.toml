@@ -1,0 +1,40 @@
+# HNU CG 做题系统站点适配包
+#
+# 本文件属固定层配置，只能由开发者维护（AI 修复范围仅限 scripts/）。
+# regions: 区域提取选择器，只有命中的子树会进入脚本层（隐私边界）。
+# detect_contains: 题型嗅探，原始 HTML 包含全部子串时判定为该类型。
+
+[adapter]
+id = "hnu-cg"
+name = "HNU CG 做题系统"
+
+# 普通编程题（assignment/programList.jsp）
+[[page_types]]
+id = "problem-program"
+script = "scripts/problem-program.js"
+submit_script = "scripts/submit-program.js"
+regions = [
+  ".cgProblemContentClass",   # 题面
+  "select#languages",         # 可选编程语言
+  "#mainclassObj",            # Java 主类名输入（隐藏容器）
+  "form[name=upload]",        # 文件上传表单
+  "iframe#showmessageFrame",  # 结果 iframe，src 含 problemID/assignID
+]
+detect_contains = [
+  'name="upload"',
+  "showmessageFrame",
+]
+
+# 程序填空题（assignment/programFillGapList.jsp）
+[[page_types]]
+id = "problem-fillgap"
+script = "scripts/problem-fillgap.js"
+submit_script = "scripts/submit-fillgap.js"
+regions = [
+  ".cgProblemContentClass",   # 题面
+  "form#uploadFORM",          # 提交表单（hidden 字段 + 填空 textarea）
+]
+detect_contains = [
+  'name="answer1"',
+  "uploadFORM",
+]

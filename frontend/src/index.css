@@ -128,3 +128,85 @@
     @apply font-sans;
     }
 }
+
+/*
+ * 题面排版样式：渲染适配框架输出的语义化 HTML。
+ * 脚本层只产出结构标签（p/pre/table 等），视觉风格完全由这里决定。
+ */
+.cg-prose {
+    line-height: 1.75;
+    font-size: 0.9375rem;
+}
+.cg-prose p {
+    margin: 0.5em 0;
+}
+.cg-prose pre {
+    background: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.75rem 1rem;
+    margin: 0.75em 0;
+    overflow-x: auto;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+.cg-prose code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.cg-prose p code,
+.cg-prose li code,
+.cg-prose td code {
+    background: var(--muted);
+    border-radius: var(--radius-sm);
+    padding: 0.1em 0.35em;
+    font-size: 0.85em;
+}
+.cg-prose pre code {
+    background: transparent;
+    padding: 0;
+}
+.cg-prose table {
+    border-collapse: collapse;
+    margin: 0.75em 0;
+}
+.cg-prose th,
+.cg-prose td {
+    border: 1px solid var(--border);
+    padding: 0.4em 0.8em;
+}
+.cg-prose th {
+    background: var(--muted);
+}
+.cg-prose img {
+    max-width: 100%;
+}
+.cg-prose ul,
+.cg-prose ol {
+    margin: 0.5em 0;
+    padding-left: 1.5em;
+}
+.cg-prose ul {
+    list-style: disc;
+}
+.cg-prose ol {
+    list-style: decimal;
+}
+.cg-prose blockquote {
+    border-left: 3px solid var(--border);
+    padding-left: 1em;
+    color: var(--muted-foreground);
+    margin: 0.75em 0;
+}
+.cg-prose h1,
+.cg-prose h2,
+.cg-prose h3,
+.cg-prose h4,
+.cg-prose h5,
+.cg-prose h6 {
+    font-weight: 600;
+    margin: 0.8em 0 0.4em;
+}
+.cg-prose a {
+    color: var(--primary);
+    text-decoration: underline;
+}

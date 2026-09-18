@@ -1,0 +1,86 @@
+{
+  "statement_html": "<p>【问题描述】<br></p><p>       矩阵是线性代数中的重要概念，应用领域非常广泛，在C/C++中，通常将矩阵定义为一个二维数组。</p><p>       本问题中，将输入两个矩阵 <span><em><strong>A </strong></em></span>和 <span><em><strong>B</strong></em></span>，实现对矩阵的数乘、矩阵加法、矩阵乘法以及行列式的计算。</p><p>       如果对矩阵的算法不了解，请查阅相关资料。</p><p>【输入形式】</p><p>       输入的第一行为两个正整数 <span><em><strong>M </strong></em></span>和 <span><em><strong>N</strong></em></span>，分别表示矩阵 <span><em><strong>A</strong></em></span> 的行数和列数；<br></p><p>       接下来的 <span><em><strong>M</strong></em></span> 行，每行 <span><em><strong>N</strong></em></span> 个用空格分隔的整数，表示矩阵<span><em><strong> A</strong></em></span> 的元素值；<br></p><p>       接下来的一行，为一个整数 <span><em><strong>x</strong></em></span>,  用于对矩阵 <span><em><strong>A</strong></em></span> 进行数乘；<br></p><p>       接下来的一行为两个正整数 <span><em><strong>K</strong></em></span> 和 <span><em><strong>L</strong></em></span>, 分别表示矩阵 <span><em><strong>B</strong></em></span> 的行数和列数；<br></p><p>       接下来的 <span><em><strong>K</strong></em></span> 行，每行为 <span><em><strong>L</strong></em></span> 个用空格分隔的整数，表示矩阵 <span><em><strong>B</strong></em></span> 的元素值。<br></p><p>【输出形式】</p><p>       输出的第一部分为<span><em><strong> M</strong></em></span> 行，每行为 <span><em><strong>N</strong></em></span> 个用空格分隔的整数，表示 <span><em><strong>x</strong></em></span> 数乘 <span><em><strong>A</strong></em></span> 的结果；<br></p><p>       接下来(如果有），如果 <span><em><strong>A</strong></em></span> 和 <span><em><strong>B</strong></em></span> 可以相加，则输出 <span><em><strong>M</strong></em></span> 行，每行为 <span><em><strong>N</strong></em></span> 个用空格分隔的整数，表示矩阵 <span><em><strong>A</strong></em></span>+<span><em><strong>B</strong></em></span> 的结果；<br></p><p>       接下来(如果有），如果 <span><em><strong>A</strong></em></span> 和 <span><em><strong>B</strong></em></span> 可以相乘，则输出 <span><em><strong>M</strong></em></span> 行，每行为 <span><em><strong>L </strong></em></span>个用空格分隔的整数，表示矩阵 <span><em><strong>A</strong></em></span>×<span><em><strong>B</strong></em></span> 的结果；<br></p><p>       接下来一行(如果有），如果 <span><em><strong>A </strong></em></span>的行列式存在，则输出一个整数，表示 <span><em><strong>A</strong></em></span> 的行列式的值；<br></p><p>       接下来一行(如果有），如果 <span><em><strong>B</strong></em></span> 的行列式存在，则输出一个整数，表示 <span><em><strong>B</strong></em></span> 的行列式的值。<br></p><p>【样例输入1】</p><pre>2 2\n29 51\n7 84\n9\n2 9\n1 1 4 8 5 7 4 5 9\n2 5 5 1 6 1 4 8 6</pre><p>【样例输出1】<br></p><pre>261 459\n63 756\n131 284 371 283 451 254 320 553 567\n175 427 448 140 539 133 364 707 567\n2079</pre><p>【样例输入2】</p><pre>5 3\n71 15 54\n24 56 8\n61 34 50\n82 94 88\n48 7 43\n3\n5 3\n2 1 5\n1 7 1\n0 1 6\n4 1 9\n2 8 7</pre><p>【样例输出2】<br></p><pre>213 45 162\n72 168 24\n183 102 150\n246 282 264\n144 21 129\n73 16 59\n25 63 9\n61 35 56\n86 95 97\n50 15 50</pre><p>【样例输入3】</p><pre>4 4\n55 73 66 16\n57 65 43 25\n61 3 15 4\n16 94 82 48\n7\n4 4\n6 3 6 7\n7 9 5 4\n8 3 1 5\n5 9 1 3</pre><p>【样例输出3】<br></p><pre>385 511 462 112\n399 455 301 175\n427 21 105 28\n112 658 574 336\n61 76 72 23\n64 74 48 29\n69 6 16 9\n21 103 83 51\n1449 1164 777 1055\n1266 1110 735 949\n527 291 400 526\n1650 1572 696 1042\n-2657450\n-783</pre><p>【样例输入4】</p><pre>5 5\n0 51 71 79 28\n3 10 66 36 57\n23 21 6 27 85\n1 21 49 62 31\n54 31 47 64 21\n11\n4 3\n3 4 5\n2 6 0\n7 3 9\n5 6 9</pre><p>【样例输出4】<br></p><pre>0 561 781 869 308\n33 110 726 396 627\n253 231 66 297 935\n11 231 539 682 341\n594 341 517 704 231\n-299004213</pre><p>【样例说明】<br>【评分标准】<br></p>",
+  "statement_text": "【问题描述】 矩阵是线性代数中的重要概念，应用领域非常广泛，在C/C++中，通常将矩阵定义为一个二维数组。 本问题中，将输入两个矩阵 A 和 B，实现对矩阵的数乘、矩阵加法、矩阵乘法以及行列式的计算。 如果对矩阵的算法不了解，请查阅相关资料。【输入形式】 输入的第一行为两个正整数 M 和 N，分别表示矩阵 A 的行数和列数； 接下来的 M 行，每行 N 个用空格分隔的整数，表示矩阵 A 的元素值； 接下来的一行，为一个整数 x, 用于对矩阵 A 进行数乘； 接下来的一行为两个正整数 K 和 L, 分别表示矩阵 B 的行数和列数； 接下来的 K 行，每行为 L 个用空格分隔的整数，表示矩阵 B 的元素值。【输出形式】 输出的第一部分为 M 行，每行为 N 个用空格分隔的整数，表示 x 数乘 A 的结果； 接下来(如果有），如果 A 和 B 可以相加，则输出 M 行，每行为 N 个用空格分隔的整数，表示矩阵 A+B 的结果； 接下来(如果有），如果 A 和 B 可以相乘，则输出 M 行，每行为 L 个用空格分隔的整数，表示矩阵 A×B 的结果； 接下来一行(如果有），如果 A 的行列式存在，则输出一个整数，表示 A 的行列式的值； 接下来一行(如果有），如果 B 的行列式存在，则输出一个整数，表示 B 的行列式的值。【样例输入1】2 2 29 51 7 84 9 2 9 1 1 4 8 5 7 4 5 9 2 5 5 1 6 1 4 8 6【样例输出1】261 459 63 756 131 284 371 283 451 254 320 553 567 175 427 448 140 539 133 364 707 567 2079【样例输入2】5 3 71 15 54 24 56 8 61 34 50 82 94 88 48 7 43 3 5 3 2 1 5 1 7 1 0 1 6 4 1 9 2 8 7【样例输出2】213 45 162 72 168 24 183 102 150 246 282 264 144 21 129 73 16 59 25 63 9 61 35 56 86 95 97 50 15 50【样例输入3】4 4 55 73 66 16 57 65 43 25 61 3 15 4 16 94 82 48 7 4 4 6 3 6 7 7 9 5 4 8 3 1 5 5 9 1 3【样例输出3】385 511 462 112 399 455 301 175 427 21 105 28 112 658 574 336 61 76 72 23 64 74 48 29 69 6 16 9 21 103 83 51 1449 1164 777 1055 1266 1110 735 949 527 291 400 526 1650 1572 696 1042 -2657450 -783【样例输入4】5 5 0 51 71 79 28 3 10 66 36 57 23 21 6 27 85 1 21 49 62 31 54 31 47 64 21 11 4 3 3 4 5 2 6 0 7 3 9 5 6 9【样例输出4】0 561 781 869 308 33 110 726 396 627 253 231 66 297 935 11 231 539 682 341 594 341 517 704 231 -299004213【样例说明】【评分标准】",
+  "submission": {
+    "kind": "fill_gap",
+    "languages": [
+      {
+        "value": "c++",
+        "label": "c++"
+      }
+    ],
+    "gaps": [
+      {
+        "name": "answer1"
+      },
+      {
+        "name": "answer2"
+      },
+      {
+        "name": "answer3"
+      },
+      {
+        "name": "answer4"
+      },
+      {
+        "name": "answer5"
+      }
+    ],
+    "skeleton": [
+      {
+        "type": "code",
+        "text": "#include <iostream>\n#include <cstdlib>\nusing namespace std;\nclass matrix\n{\nprivate:\n    int rows, cols;\n    int **p;\npublic:\n    matrix();\n    matrix(int &M, int &N);\n    matrix(matrix &A, int &&m, int &n);\n    ~matrix();\n\n    matrix multi(int x);   // 数乘\n    int det();           // 计算行列式\n    void out();    //输出矩阵\n    void input();\n\n    matrix operator+(matrix &another); //重载加法运算实现矩阵相加\n    matrix operator*(matrix &another); //重载乘法运算实现矩阵相乘\n};\nmatrix::matrix(int &M, int &N)\n{\n    rows=M, cols=N;\n    p=new int*[rows];\n    for(int i=0;i<M;i++)\n    {\n        p[i]=new int[cols];\n    }\n}\n\nmatrix::matrix(matrix &A, int &&m, int &n)   //从矩阵A中删除第m行第n列后得到新的矩阵\n{\n    "
+      },
+      {
+        "type": "gap",
+        "name": "answer1"
+      },
+      {
+        "type": "code",
+        "text": "\n}\n\nmatrix::~matrix()\n{\n    for(int i=0; i<rows; i++)\n        delete[] p[i];\n\n    delete[] p;\n}\n\nmatrix matrix::multi(int x)   // 数乘\n{\n    matrix tmp(rows, cols);\n    "
+      },
+      {
+        "type": "gap",
+        "name": "answer2"
+      },
+      {
+        "type": "code",
+        "text": "\n    return tmp;\n}\n\nvoid matrix::out()    //输出矩阵\n{\n     /* 逐行输出，数据间用空格分隔 */\n    "
+      },
+      {
+        "type": "gap",
+        "name": "answer3"
+      },
+      {
+        "type": "code",
+        "text": "\n}\n\nvoid matrix::input()\n{\n    for(int i=0; i<rows; i++)\n        for(int j=0; j<cols; j++)\n            cin>>p[i][j];\n\n}\n\nmatrix matrix::operator+(matrix &another) //重载加法运算实现矩阵相加\n{\n    matrix tmp(rows, cols);\n    /* 矩阵对应位置元素相加 */\n    "
+      },
+      {
+        "type": "gap",
+        "name": "answer4"
+      },
+      {
+        "type": "code",
+        "text": "\n    return tmp;\n}\n\nmatrix matrix::operator*(matrix &another)  //重载乘法运算实现矩阵相乘\n{\n    matrix tmp(rows, another.cols);\n    for(int i=0; i<rows; i++)\n    {\n        for(int j=0; j<another.cols; j++)\n        {\n           /* 计算A矩阵的第i行与B矩阵的第j列元素对应相乘后之和，作为新矩阵的第i行第j列元素的值 */\n           "
+      },
+      {
+        "type": "gap",
+        "name": "answer5"
+      },
+      {
+        "type": "code",
+        "text": "\n        }\n    }\n    return tmp;\n}\n\nint matrix::det()\n{\n    if (rows==1)\n        return p[0][0];\n    else\n    {\n        int result=0, flag;\n        for(int i=0; i<cols; i++)\n        {\n            flag=(i%2)?-1:1;\n            matrix tmp(*this, 0, i);\n            result=result+flag*p[0][i]*tmp.det();    // 使用代数余子式求行列式的值, 递归\n        }\n        return result;\n    }\n}\nint main()\n{\n    int M,N;\n\n    // A矩阵的行和列\n    cin>>M>>N;\n\n    matrix mA(M, N);    //生成A矩阵\n\n    // 输入矩阵值\n\n    mA.input();\n\n    // 输入数乘值\n\n    int x;\n    cin>>x;\n\n    matrix mm1=mA.multi(x);\n\n    mm1.out();\n\n    //B矩阵的行和列\n    int K, L;\n    cin>>K>>L;\n\n    matrix mB(K, L);  //生成B矩阵\n    mB.input();\n\n    /* 求矩阵A和矩阵B的和 */\n\n    if (M==K && N==L)\n    {\n        matrix mm2=mA+mB;\n        mm2.out();\n    }\n\n   /* 求矩阵A和矩阵B的乘积矩阵 */\n    if (N==K)\n    {\n        matrix mm3=mA*mB;\n        mm3.out();\n    }\n\n    /* 矩阵A的行列式的值 */\n    if (M==N)\n        cout<<mA.det()<<endl;\n\n    if (K==L)\n        cout<<mB.det()<<endl;\n\n    return 0;\n}\n"
+      }
+    ],
+    "hidden_fields": {
+      "assignID": "1626",
+      "byCE": "true",
+      "doSubmit": "true",
+      "problemID": "22909",
+      "progLanguage": "c++",
+      "wtime": "0"
+    },
+    "problem_id": 22909,
+    "assign_id": 1626
+  }
+}

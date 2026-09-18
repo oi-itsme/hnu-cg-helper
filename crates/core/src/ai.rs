@@ -130,3 +130,47 @@ pub async fn stream_chat(req: ChatRequest, tx: mpsc::Sender<ChatChunk>) -> Resul
 
     Ok(())
 }
+
+/// 非流式 AI 聊天：发送消息列表，返回完整回复内容
+///
+/// 供 AI 修复循环等不需要流式展示的场景使用。
+pub async fn chat_once(
+    api_key: &str,
+    base_url: &str,
+    model: &str,
+    messages: &[ChatMessage],
+) -> Result<String, CoreError> {
+    let client = reqwest::Client::new();
+
+    let body = serde_json::json!({
+        "model": model,
+        "messages": messages,
+        "stream": false,
+    });
+
+    let response = client
+        .post(format!(
+            "{}/chat/completions",
+            base_url.trim_end_matches('/')
+        ))
+        .header("Authorization", format!("Bearer {api_key}"))
+        .json(&body)
+        .send()
+        .await
+        .map_err(|e| CoreError::Ai(format!("请求失败: {e}")))?;
+
+    if !response.status().is_success() {
+        let status = response.status();
+        let text = response.text().await.unwrap_or_default();
+        return Err(CoreError::Ai(format!("HTTP {status}: {text}")));
+    }
+
+    let parsed: serde_json::Value = response
+        .json()
+        .await
+        .map_err(|e| CoreError::Ai(format!("响应解析失败: {e}")))?;
+    parsed["choices"][0]["message"]["content"]
+        .as_str()
+        .map(str::to_owned)
+        .ok_or_else(|| CoreError::Ai("响应缺少 content 字段".to_string()))
+}
