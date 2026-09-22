@@ -3,6 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { streamChat, getAiConfig, setAiConfig, type ChatMessage } from '@/lib/api'
+import { useProblemContext } from '@/stores/problem-context'
 
 const SYSTEM_PROMPT: ChatMessage = {
   role: 'system',
@@ -12,6 +13,7 @@ const SYSTEM_PROMPT: ChatMessage = {
 
 export function AIPanel() {
   const queryClient = useQueryClient()
+  const { statementText, title } = useProblemContext()
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([])
   const [chatInput, setChatInput] = useState('')
   const [chatStreaming, setChatStreaming] = useState(false)
@@ -66,7 +68,16 @@ export function AIPanel() {
     setChatInput('')
     setChatStreaming(true)
 
-    const fullMessages = [SYSTEM_PROMPT, ...newMessages]
+    // 有当前题目时，题面纯文本作为背景上下文注入
+    const contextMsgs: ChatMessage[] = statementText
+      ? [
+          {
+            role: 'system',
+            content: `学生当前正在查看${title ?? '一道题目'}，题面如下：\n\n${statementText}`,
+          },
+        ]
+      : []
+    const fullMessages = [SYSTEM_PROMPT, ...contextMsgs, ...newMessages]
     const assistantMsg: ChatMessage = { role: 'assistant', content: '' }
     setChatMessages([...newMessages, assistantMsg])
 
@@ -111,7 +122,12 @@ export function AIPanel() {
       {!collapsed && (
         <div className="flex w-96 flex-col border-l bg-card">
           <div className="flex items-center justify-between border-b p-4">
-            <h2 className="font-semibold">AI 助手</h2>
+            <div>
+              <h2 className="font-semibold">AI 助手</h2>
+              {statementText && (
+                <p className="text-xs text-muted-foreground">已加载当前题目上下文</p>
+              )}
+            </div>
             <div className="flex gap-1">
               <Button
                 variant="ghost"

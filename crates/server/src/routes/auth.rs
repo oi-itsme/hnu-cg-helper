@@ -82,8 +82,9 @@ pub async fn do_login(
             (StatusCode::UNAUTHORIZED, Json((&e).into()))
         })?;
 
-    // 保存到服务器内存
+    // 保存到服务器内存（学号用于管线脱敏的已知隐私值）
     *state.current_token.write().await = Some(token);
+    *state.current_stu_id.write().await = Some(req.stu_id.clone());
 
     Ok(Json(LoginResponse { success: true }))
 }
@@ -93,5 +94,6 @@ pub async fn do_login(
 /// 清除当前登录状态。
 pub async fn logout(State(state): State<AppState>) -> Json<LoginResponse> {
     *state.current_token.write().await = None;
+    *state.current_stu_id.write().await = None;
     Json(LoginResponse { success: true })
 }

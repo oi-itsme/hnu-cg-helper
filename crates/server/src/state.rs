@@ -1,3 +1,4 @@
+use hnu_cg_helper_adapter::{AdapterRegistry, EngineConfig};
 use hnu_cg_helper_core::{CgSession, CgToken, ConfigManager};
 use std::collections::HashMap;
 use std::path::PathBuf;
@@ -19,12 +20,20 @@ pub struct AppState {
     pub pending_sessions: Arc<RwLock<HashMap<String, PendingSession>>>,
     /// 当前登录的 CG token（进程内存，重启丢失）
     pub current_token: Arc<RwLock<Option<CgToken>>>,
+    /// 当前登录的学号（管线脱敏的已知隐私值）
+    pub current_stu_id: Arc<RwLock<Option<String>>>,
     /// 全局配置管理器
     pub config: Arc<RwLock<ConfigManager>>,
+    /// 站点适配器注册表（热重载）
+    pub adapters: Arc<AdapterRegistry>,
+    /// 脚本引擎限额配置
+    pub engine_cfg: EngineConfig,
+    /// 失败现场留存目录
+    pub scenes_dir: PathBuf,
 }
 
 impl AppState {
-    pub fn new(config_path: PathBuf) -> Self {
+    pub fn new(config_path: PathBuf, adapters: AdapterRegistry, scenes_dir: PathBuf) -> Self {
         let config_manager =
             ConfigManager::load(config_path).expect("Failed to load config manager");
 
@@ -35,7 +44,15 @@ impl AppState {
         Self {
             pending_sessions: Arc::new(RwLock::new(HashMap::new())),
             current_token: Arc::new(RwLock::new(None)),
+            current_stu_id: Arc::new(RwLock::new(None)),
             config: Arc::new(RwLock::new(config_manager)),
+            adapters: Arc::new(adapters),
+            engine_cfg: EngineConfig {
+                // cleanHtml 相对 URL 重写基址（站点源站，core 统一维护）
+                base_url: hnu_cg_helper_core::problem::CG_BASE_URL.into(),
+                ..EngineConfig::default()
+            },
+            scenes_dir,
         }
     }
 
